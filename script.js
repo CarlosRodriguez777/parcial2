@@ -138,3 +138,44 @@ function getPolygonVertices(centerX, centerY, sides, radius) {
     // Retorno de datos exigido en la rúbrica 
     return vertices;
 }
+
+/**
+ * Función principal que orquesta el dibujo en el canvas.
+ * Se ejecuta automáticamente al cargar el script.
+ */
+function drawScene() {
+    // Configuración central del lienzo (nuestro canvas es de 800x600)
+    const centerX = 400; 
+    const centerY = 300; 
+    const R = 150; // Radio del polígono (R)
+
+    // Lógica para n aleatorio: un número entre 5 y 10
+    // Math.random() genera un decimal entre 0 y 1. Lo ajustamos al rango deseado.
+    const n = Math.floor(Math.random() * (10 - 5 + 1)) + 5; 
+
+    // 1. Calculamos los vértices del polígono
+    const vertices = getPolygonVertices(centerX, centerY, n, R);
+
+    // 2. Dibujar las aristas del polígono (usando Bresenham)
+    for (let i = 0; i < vertices.length; i++) {
+        let actual = vertices[i];
+        // Para cerrar el polígono, el último vértice debe conectarse con el primero (índice 0)
+        let siguiente = vertices[(i + 1) % vertices.length];
+        
+        // Dibujamos la línea de un vértice al siguiente en color azul
+        bresenhamLine(actual.x, actual.y, siguiente.x, siguiente.y, "#0000FF");
+    }
+
+    // 3. Dibujar las circunferencias en cada vértice (usando Punto Medio)
+    // El radio de la circunferencia debe ser R/4 según las instrucciones
+    const radioCirculo = R / 4;
+
+    for (let i = 0; i < vertices.length; i++) {
+        let vertice = vertices[i];
+        // Dibujamos el círculo centrado en el vértice en color rojo
+        drawCircle(vertice.x, vertice.y, radioCirculo, "#FF0000");
+    }
+}
+
+// Llamamos a la función para que el proceso ocurra al cargar la página
+drawScene();
