@@ -109,4 +109,32 @@ function drawCircle(xc, yc, r, color = "#000000") {
         plotCirclePoints(xc, yc, x, y);
     }
 }
-drawCircle(300, 300, 100, "red");
+
+ /**
+ * Calcula los vértices de un polígono regular.
+ * @param {number} centerX - Centro en X
+ * @param {number} centerY - Centro en Y
+ * @param {number} sides - Número de lados
+ * @param {number} radius - Radio
+ * @returns {Array} Arreglo de objetos {x, y}
+ */
+function getPolygonVertices(centerX, centerY, sides, radius) {
+    // Arreglo para almacenar las coordenadas de cada punto [cite: 37]
+    let vertices = [];
+    
+    // Un círculo completo tiene 2 * PI radianes. Lo dividimos entre el número de lados.
+    let angleStep = (2 * Math.PI) / sides;
+
+    for (let i = 0; i < sides; i++) {
+        // Lógica Matemática: Cálculo trigonométrico de las coordenadas.
+        // Se multiplica el coseno/seno por el radio y se le suma el centro para desplazarlo.
+        let x = centerX + radius * Math.cos(i * angleStep);
+        let y = centerY + radius * Math.sin(i * angleStep);
+        
+        // Guardamos el vértice calculado en nuestro arreglo
+        vertices.push({ x: x, y: y });
+    }
+
+    // Retorno de datos exigido en la rúbrica 
+    return vertices;
+}
