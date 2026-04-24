@@ -64,4 +64,49 @@ function bresenhamLine(x0, y0, x1, y1, color = "#000000") {
         }
     }
 }
-bresenhamLine(50, 50, 200, 200, "blue");
+
+/**
+ * Algoritmo de Punto Medio para trazar circunferencias píxel a píxel.
+ * @param {number} xc - Centro en X
+ * @param {number} yc - Centro en Y
+ * @param {number} r - Radio
+ */
+function drawCircle(xc, yc, r, color = "#000000") {
+    let x = 0;
+    let y = r;
+    
+    // Lógica Matemática: Cálculo del parámetro de decisión inicial p.
+    // p = 1 - r permite determinar si el siguiente píxel está 
+    // dentro o fuera del borde ideal de la circunferencia. 
+    let p = 1 - r;
+
+    // Función interna para aplicar simetría de 8 octantes.
+    // Esto optimiza el proceso dibujando 8 píxeles con un solo cálculo. 
+    const plotCirclePoints = (xc, yc, x, y) => {
+        drawPixel(ctx, xc + x, yc + y, color);
+        drawPixel(ctx, xc - x, yc + y, color);
+        drawPixel(ctx, xc + x, yc - y, color);
+        drawPixel(ctx, xc - x, yc - y, color);
+        drawPixel(ctx, xc + y, yc + x, color);
+        drawPixel(ctx, xc - y, yc + x, color);
+        drawPixel(ctx, xc + y, yc - x, color);
+        drawPixel(ctx, xc - y, yc - x, color);
+    };
+
+    // Dibujamos los puntos iniciales
+    plotCirclePoints(xc, yc, x, y);
+
+    while (x < y) {
+        x++;
+        if (p < 0) {
+            // El punto medio está dentro, solo incrementamos X
+            p += 2 * x + 1;
+        } else {
+            // El punto medio está fuera, incrementamos X y decrementamos Y
+            y--;
+            p += 2 * (x - y) + 1;
+        }
+        plotCirclePoints(xc, yc, x, y);
+    }
+}
+drawCircle(300, 300, 100, "red");
